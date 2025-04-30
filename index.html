@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="assets/favicon.png" type="image/png" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="mobile-styles.css" />
+    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css"
+    />
+    <title>Instagram</title>
+  </head>
+
+  <body>
+    <div id="upload-container">
+      <div class="upload-inner-content">
+        <input
+          type="file"
+          id="files"
+          class="file-name"
+          multiple
+          class="mb-3 photo"
+        />
+        <img id="set-img" class="preview-photo" src="" alt="" />
+
+        <textarea name="caption=" cols="30" rows="1" id="caption-text">
+        </textarea>
+        <button id="send" class="btn btn-primary btn-sm">
+          Upload New Post
+        </button>
+        <button id="update-post" class="btn btn-dark btn-sm show-edit-btn">
+          Edit
+        </button>
+        <p id="uploading"></p>
+        <progress value="0" max="100" id="progress" class="mb-3"></progress>
+        <button type="button" class="btn btn-danger" id="cancel">cancel</button>
+      </div>
+    </div>
+    <div id="firebaseui-auth-container"></div>
+    <div id="app">
+      <div class="main-container">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="logo cursor">
+              <img
+                alt="Instagram"
+                src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
+                srcset="
+                  https://www.instagram.com/static/images/web/mobile_nav_type_logo-2x.png/1b47f9d0e595.png 2x
+                "
+              />
+            </div>
+            <div class="search-bar">
+              <div class="search-bar-inner">
+                <span class="search-icon"></span>
+                <span class="search-text">Search</span>
+              </div>
+            </div>
+            <span
+              ><button
+                class="margin-left upload-btn btn btn-outline-info btn-sm"
+              >
+                Upload
+              </button></span
+            >
+            <div class="navbar-icons">
+              <div class="navbar-icons-inner">
+                <div>
+                  <div class="">
+                    <a href="/" tabindex="0"
+                      ><svg
+                        aria-label="Home"
+                        class="_8-yf5"
+                        fill="#262626"
+                        height="22"
+                        viewBox="0 0 48 48"
+                        width="22"
+                      >
+                        <path
+                          d="M45.5 48H30.1c-.8 0-1.5-.7-1.5-1.5V34.2c0-2.6-2.1-4.6-4.6-4.6s-4.6 2.1-4.6 4.6v12.3c0 .8-.7 1.5-1.5 1.5H2.5c-.8 0-1.5-.7-1.5-1.5V23c0-.4.2-.8.4-1.1L22.9.4c.6-.6 1.6-.6 2.1 0l21.5 21.5c.3.3.4.7.4 1.1v23.5c.1.8-.6 1.5-1.4 1.5z"
+                        ></path>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+                <div class="margin-left">
+                  <a class="xWeGp" href="/direct/inbox/" tabindex="0"
+                    ><svg
+                      aria-label="Direct"
+                      class="_8-yf5"
+                      fill="#262626"
+                      height="22"
+                      viewBox="0 0 48 48"
+                      width="22"
+                    >
+                      <path
+                        d="M47.8 3.8c-.3-.5-.8-.8-1.3-.8h-45C.9 3.1.3 3.5.1 4S0 5.2.4 5.7l15.9 15.6 5.5 22.6c.1.6.6 1 1.2 1.1h.2c.5 0 1-.3 1.3-.7l23.2-39c.4-.4.4-1 .1-1.5zM5.2 6.1h35.5L18 18.7 5.2 6.1zm18.7 33.6l-4.4-18.4L42.4 8.6 23.9 39.7z"
+                      ></path>
+                    </svg>
+                  </a>
+                  <div class="_2g5Gx"></div>
+                </div>
+                <div class="margin-left">
+                  <a href="/explore/" tabindex="0"
+                    ><svg
+                      aria-label="Find People"
+                      class="_8-yf5"
+                      fill="#262626"
+                      height="22"
+                      viewBox="0 0 48 48"
+                      width="22"
+                    >
+                      <path
+                        clip-rule="evenodd"
+                        d="M24 0C10.8 0 0 10.8 0 24s10.8 24 24 24 24-10.8 24-24S37.2 0 24 0zm0 45C12.4 45 3 35.6 3 24S12.4 3 24 3s21 9.4 21 21-9.4 21-21 21zm10.2-33.2l-14.8 7c-.3.1-.6.4-.7.7l-7 14.8c-.3.6-.2 1.3.3 1.7.3.3.7.4 1.1.4.2 0 .4 0 .6-.1l14.8-7c.3-.1.6-.4.7-.7l7-14.8c.3-.6.2-1.3-.3-1.7-.4-.5-1.1-.6-1.7-.3zm-7.4 15l-5.5-5.5 10.5-5-5 10.5z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </a>
+                </div>
+                <div class="margin-left">
+                  <a class="_0ZPOP kIKUG" href="/accounts/activity/"
+                    ><svg
+                      aria-label="Activity Feed"
+                      class="_8-yf5"
+                      fill="#262626"
+                      height="22"
+                      viewBox="0 0 48 48"
+                      width="22"
+                    >
+                      <path
+                        d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"
+                      ></path>
+                    </svg>
+                  </a>
+                  <div class="">
+                    <div class="poA5q" style="margin-left: -423px"></div>
+                  </div>
+                </div>
+                <div class="profile-pic margin-left">
+                  <img
+                    alt="imharjotsingh's profile picture"
+                    data-testid="user-avatar"
+                    draggable="false"
+                    src="./assets/20200306_105305.jpg"
+                  />
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="auth-user cursor"></span>
+          <span
+            ><button class="margin-left logout-btn btn btn-secondary btn-sm">
+              Logout
+            </button></span
+          >
+        </div>
+        <main>
+          <div class="content-container">
+            <div class="content">
+              <div class="stories">
+                <div class="stories-inner">
+                  <div class="story">
+                    <img
+                      class="story-image"
+                      alt="Nessa's profile picture"
+                      data-testid="user-avatar"
+                      draggable="false"
+                      src="./assets/IMG-20240918-WA0004.jpg.jpg"
+                    />
+                    <div class="story-border"></div>
+                    <span class="story-text">Nessa</span>
+                  </div>
+                  <div class="story">
+                    <img
+                      class="story-image"
+                      alt="Elaine's picture"
+                      data-testid="user-avatar"
+                      draggable="false"
+                      src="./assets/IMG-20240919-WA0005.jpg"
+                    />
+                    <div class="story-border"></div>
+                    <span class="story-text">Elaine</span>
+                  </div>
+                  <div class="story">
+                    <img
+                      class="story-image"
+                      alt="Wang's profile picture"
+                      data-testid="user-avatar"
+                      draggable="false"
+                      src="./assets/Screenshot_20211209-083205_WhatsApp.jpg"
+                    />
+                    <div class="story-border"></div>
+                    <span class="story-text">Wang</span>
+                  </div>
+                  <div class="story">
+                    <img
+                      class="story-image"
+                      alt="King's profile picture"
+                      data-testid="user-avatar"
+                      draggable="false"
+                      src="./assets/Screenshot_20240524_023640_PhotoDirector.jpg"
+                    />
+                    <div class="story-border"></div>
+                    <span class="story-text">King</span>
+                  </div>
+
+                  <div class="story">
+                    <img
+                      class="story-image"
+                      alt="Nkosi's profile picture"
+                      data-testid="user-avatar"
+                      draggable="false"
+                      src="./assets/IMG_20180617_182243_464.jpg"
+                    />
+                    <div class="story-border"></div>
+                    <span class="story-text">Nkosi</span>
+                  </div>
+                  <div class="story">
+                    <img
+                      class="story-image"
+                      alt="Venny's profile picture"
+                      data-testid="user-avatar"
+                      draggable="false"
+                      src="./assets/IMG-20240918-WA0004.jpg.jpg"
+                    />
+                    <div class="story-border"></div>
+                    <span class="story-text">Venny</span>
+                  </div>
+                  <div class="story">
+                    <img
+                      class="story-image"
+                      alt="akhil's picture"
+                      data-testid="user-avatar"
+                      draggable="false"
+                      src="assets/akhil.png"
+                    />
+                    <div class="story-border"></div>
+                    <span class="story-text">Akhil.zaio</span>
+                  </div>
+                  <div class="story">
+                    <img
+                      class="story-image"
+                      alt="Sneaker.corner's profile picture"
+                      data-testid="user-avatar"
+                      draggable="false"
+                      src="./assets/air-jordan-IX-shoe-01.jpg"
+                    />
+                    <div class="story-border"></div>
+                    <span class="story-text">Sneaker.corner</span>
+                  </div>
+                </div>
+              </div>
+              <div class="posts"></div>
+            </div>
+            <div class="sidebar">
+              <div class="profile-details">
+                <div class="profile-details-pic">
+                  <img
+                    class="story-image"
+                    alt="Nkosiyethu's profile picture"
+                    data-testid="user-avatar"
+                    draggable="false"
+                    src="./assets/IMG_20160918_152556.jpg"
+                  />
+                </div>
+                <div class="user-details">
+                  <span class="username">nkosiyethu</span>
+                  <span class="name">Nkosiyethu</span>
+                </div>
+              </div>
+              <div class="suggestions">
+                <div class="suggestions-header">
+                  <span class="title">Suggestions for you</span>
+                  <a class="see-all-btn">See all</a>
+                </div>
+                <div class="suggestion">
+                  <div class="suggestion-details">
+                    <div class="suggestion-pic">
+                      <img
+                        alt="venessa's profile picture"
+                        data-testid="user-avatar"
+                        draggable="false"
+                        src="./assets/IMG_20160918_152556.jpg"
+                      />
+                    </div>
+                    <div class="suggestion-profile-details">
+                      <span class="profile-name">nkosi.twin</span>
+                      <span class="text-muted">New to instagram</span>
+                    </div>
+                  </div>
+                  <a class="follow-btn">Follow</a>
+                </div>
+                <div class="suggestion">
+                  <div class="suggestion-details">
+                    <div class="suggestion-pic">
+                      <img
+                        alt="venessa's profile picture"
+                        data-testid="user-avatar"
+                        draggable="false"
+                        src="./assets/IMG_20160918_152556.jpg"
+                      />
+                    </div>
+                    <div class="suggestion-profile-details">
+                      <span class="profile-name">nkosi.bro</span>
+                      <span class="text-muted">New to instagram</span>
+                    </div>
+                  </div>
+                  <a class="follow-btn">Follow</a>
+                </div>
+                <div class="suggestion">
+                  <div class="suggestion-details">
+                    <div class="suggestion-pic">
+                      <img
+                        alt="venessa's profile picture"
+                        data-testid="user-avatar"
+                        draggable="false"
+                        src="./assets/IMG_20160918_152556.jpg"
+                      />
+                    </div>
+                    <div class="suggestion-profile-details">
+                      <span class="profile-name">nkosi.soldier</span>
+                      <span class="text-muted">New to instagram</span>
+                    </div>
+                  </div>
+                  <a class="follow-btn">Follow</a>
+                </div>
+                <div class="suggestion">
+                  <div class="suggestion-details">
+                    <div class="suggestion-pic">
+                      <img
+                        alt="venessa's profile picture"
+                        data-testid="user-avatar"
+                        draggable="false"
+                        src="./assets/IMG_20160918_152556.jpg"
+                      />
+                    </div>
+                    <div class="suggestion-profile-details">
+                      <span class="profile-name">nkosi.ninja</span>
+                      <span class="text-muted">New to instagram</span>
+                    </div>
+                  </div>
+                  <a class="follow-btn">Follow</a>
+                </div>
+              </div>
+              <div class="sidebar-footer"></div>
+            </div>
+          </div>
+        </main>
+        <div class="modal default-modal">
+          <div class="modal-content default">
+            <button type="button" class="option-btn">Report</button>
+            <button type="button" class="option-btn">Unfollow</button>
+            <button type="button" class="option-btn">Go to post</button>
+            <button type="button" class="option-btn">Share to...</button>
+            <button type="button" class="option-btn">Copy link</button>
+            <button type="button" class="option-btn">Embed</button>
+            <button type="button" class="option-btn">Cancel</button>
+          </div>
+        </div>
+        <div class="modal authenticated">
+          <div class="modal-content" id="auth-content">
+            <button type="button" class="option-btn action-icon" id="edit-btn">
+              Edit
+            </button>
+            <button
+              type="button"
+              class="option-btn action-icon"
+              id="delete-post"
+            >
+              Delete
+            </button>
+            <button type="button" class="option-btn">Report</button>
+            <button type="button" class="option-btn">Unfollow</button>
+            <button type="button" class="option-btn">Go to post</button>
+            <button type="button" class="option-btn">Share to...</button>
+            <button type="button" class="option-btn">Copy link</button>
+            <button type="button" class="option-btn">Embed</button>
+            <button type="button" class="option-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyAaTgOrL2QUM5O8S3tIoQ1YzMg-Y_mhEsE",
+        authDomain: "instagram-bb9bc.firebaseapp.com",
+        projectId: "instagram-bb9bc",
+        storageBucket: "instagram-bb9bc.appspot.com",
+        messagingSenderId: "690164434950",
+        appId: "1:690164434950:web:e5dc3d0373139158b09b87",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      const auth = firebase.auth();
+      const storage = firebase.storage();
+      const db = firebase.firestore();
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.1.0/browser-cuid.min.js"
+      integrity="sha512-N+OrNnOa/frTq5OTi6rWhzKbR0K0jZ6FXWYbnwGXKAyR1ZbaLMnvYvYMNSGuROdPvDS6TFEwtR/ykwrdCEjR6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
