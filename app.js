@@ -382,11 +382,11 @@ class App {
             <div class="profile-area">
               <div class="post-pic">
                 <img
-                  alt="jayshetty's profile picture"
+                  alt="profile picture"
                   class="_6q-tv"
                   data-testid="user-avatar"
                   draggable="false"
-                  src="assets/akhil.png"
+                  src="./assets/air-jordan-IX-shoe-01.jpg"
                 />
               </div>
               <span class="profile-name">${post.username}</span>
